@@ -34,7 +34,7 @@ router.get('/login', function(req, res){
 })
 
 router.get('/home', isLoggedIn,async function(req, res){
-  var user = await userModel.findOne({username:req.session.passport.user});
+  var user = await userModel.findOne({username:req.session.passport.user}).populate('friend');
   res.render('home.ejs',{user: user});
 })
 
@@ -66,6 +66,28 @@ router.post('/searchuser',isLoggedIn,async (req, res,next) => {
 
   console.log(allusers)
   res.status(200).json(allusers)
+});
+
+
+router.post('/addfriend', isLoggedIn,async function(req, res, next) {
+  const friendid= req.body.friendid
+  const frienduser = await userModel.findOne({_id: friendid})
+  const user = await userModel.findOne({username:req.session.passport.user})
+
+  if(user.friend.indexOf(friendid) !== -1){
+    res.status(200).json({message: "friend already"})    
+    return
+  }
+  else{ 
+    user.friend.push(friendid)
+    frienduser.friend.push(user._id)
+    await user.save()
+    await frienduser.save()
+    
+    res.status(200).json({message: "friend added"})
+  }
+
+  
 });
 
 

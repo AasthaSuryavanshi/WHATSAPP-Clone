@@ -44,65 +44,23 @@
 
 <!--chats -->
       <div class="chat-list">
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://lh5.googleusercontent.com/-7ssjf_mDE1Q/AAAAAAAAAAI/AAAAAAAAASo/tioYx2oklWEHoo5nAEyCT-KeLxYqE5PuQCLcDEAE/s100-c-k-no-mo/photo.jpg" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Nowfal</h4>
-              <p class="time unread">11:49</p>
+          <% user.friend.forEach(function(frd){ %>
+            <div onclick="addfriend(event,'<%= frd._id%>','<%=frd.username%>','<%=frd.profileImage%>')" class="chat-box" id="friend_<%=frd._id%>">
+              <div class="img-box">
+                <img class="img-cover" src="<%=frd.profileImage%>" alt="">
+              </div>
+              <div class="chat-details">
+                <div class="text-head">
+                  <h4><%= frd.username%></h4>
+                  <p class="time">07:49</p>
+                </div>
+                <div class="text-message">
+                  <p>Awesome! I'll start a vid..</p>
+                </div>
+              </div>
             </div>
-            <div class="text-message">
-              <p>“How are you?”</p>
-              <b>1</b>
-            </div>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Rohan</h4>
-              <p class="time unread">10:49</p>
-            </div>
-            <div class="text-message">
-              <p>“I’ll be there.”</p>
-              <b>4</b>
-            </div>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/8367221/pexels-photo-8367221.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Zoya</h4>
-              <p class="time unread">09:49</p>
-            </div>
-            <div class="text-message">
-              <p>“Make somebody’s day.”</p>
-              <b>2</b>
-            </div>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Ava</h4>
-              <p class="time">08:49</p>
-            </div>
-            <div class="text-message">
-              <p>“Dreams come true.”</p>
-            </div>
-          </div>
-        </div>
+          <% })%>
+          
         <div class="chat-box active">
           <div class="img-box">
             <img class="img-cover" src="https://images.pexels.com/photos/2474307/pexels-photo-2474307.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
@@ -117,49 +75,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/3564412/pexels-photo-3564412.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Azariah</h4>
-              <p class="time">06:49</p>
-            </div>
-            <div class="text-message">
-              <p>“Love, light, laughter.”</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/2919367/pexels-photo-2919367.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Oliver</h4>
-              <p class="time unread">Yesterday</p>
-            </div>
-            <div class="text-message">
-              <p>“Appreciate the mome..”</p>
-              <b>2</b>
-            </div>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="img-box">
-            <img class="img-cover" src="https://images.pexels.com/photos/14526673/pexels-photo-14526673.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-          </div>
-          <div class="chat-details">
-            <div class="text-head">
-              <h4>Jeslin</h4>
-              <p class="time">Yesterday</p>
-            </div>
-            <div class="text-message">
-              <p>“Now or never.”</p>
-            </div>
-          </div>
-        </div>
+      
       </div>
 
     </div>
@@ -239,6 +155,8 @@
     <script>
         var socket = io();
 
+        const username = `<%= user.username %>`
+        
       document.querySelector("#search-inp").addEventListener("input",async (event) => {
          document.querySelector(".search-list").style.display="initial"
          document.querySelector(".chat-list").style.display="none"
@@ -247,20 +165,30 @@
          const response = await axios.post('/searchuser',{
             data: data,
          })
-         console.log(response);
+        document.querySelector(".search-list").innerHTML ="";
+
+         console.log(response.data)
+         response.data.forEach(searchuser => {
+          if(username == searchuser.username){
+            return
+          }else{
+            appendSearch(searchuser._id, searchuser.username, searchuser.profileImage)
+
+          }
+         });
         })
 
 
 
 
       function appendSearch(userID, username , profileImage) {
-        var searchTemp = `<div class="chat-box">
+        var searchTemp = `<div onclick="addfriend(event,'${userID}', '${username}' , '${profileImage}')" class="chat-box" id="${userID}">
         <div class="img-box">
-          <img class="img-cover" src="${elem.profileImage}" alt="">
+          <img class="img-cover" src="${profileImage}" alt="">
         </div>
         <div class="chat-details">
           <div class="text-head">
-            <h4>${elem.username}</h4>
+            <h4>${username}</h4>
             <p class="time">Yesterday</p>
           </div>
           <div class="text-message">
@@ -270,6 +198,49 @@
       </div>`;
       document.querySelector(".search-list").innerHTML += searchTemp;
       }
+
+
+      async function addfriend(event,id,username,profileImage) {
+        try {
+          const response = await axios.post('/addfriend',{
+            friendid: id
+          })
+          console.log(response)
+          
+        } catch (error) {
+          console.log("this is error")
+        }
+        appendChat( id,username,profileImage )
+
+        document.querySelector('.search-list').style.display = "none"
+        document.querySelector('.chat-list').style.display = "initial"
+
+
+      }
+
+      function appendChat(id,username,profileImage) {
+        if(document.querySelector(`.chat-box #friendid_${id}`)){
+          return
+        }else{
+          var temp = `<div class="chat-box">
+            <div class="img-box">
+              <img class="img-cover" src="${profileImage}" alt="">
+            </div>
+            <div class="chat-details">
+              <div class="text-head">
+                <h4>${username}</h4>
+                <p class="time">08:49</p>
+                </div>
+                <div class="text-message">
+                  <p>“Dreams come true.”</p>
+                  </div>
+                  </div>
+                  </div>`
+                  document.querySelector(".chat-list").innerHTML += temp;
+                }
+
+      }
+
 
     </script>
 </body>
