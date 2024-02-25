@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Message JS</title>
+  <style>
+    body {
+      background-image: url(https://img.freepik.com/premium-photo/social-media-background-with-floating-whatsapp-balloon-logo-3d-rendering_438535-266.jpg);
+      background-position: center center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+      color: white;
+      overflow: hidden;
+      font-family: gilroy;
+    }
+    #center{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10vh;
+        filter: drop-shadow(0 0 0.75rem #9cf3e4);
+
+    }
+    #center:hover{
+      /* box-shadow: 0 0 0.75rem #01ff62; */
+      filter: drop-shadow(0 0 0.75rem #01ff62);
+    }
+    input {
+      border-color: aquamarine;
+    }
+
+    textarea {
+      resize: none;
+      max-height: 150px;
+      border-color: aquamarine;
+    }
+
+    .wrapper {
+      display: block;
+      width: 300px;
+      margin: auto;
+      border: 1px solid white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button{
+      border-radius: 5px;
+      padding: 0.5vh 2vh;
+      border: none;
+      margin-top: 2vh;
+    }
+    button:hover{
+      background-color: #00c94d;
+      box-shadow: 2px 2px 10px #fff;
+      color: #fff;
+      cursor: pointer;  
+    }
+    .wrapper{
+      margin-top: 2vh;
+      background-color: #10bc9f;
+      border-radius: 30px;
+      padding: 70px 20px;
+      filter: drop-shadow(0 0 0.75rem #2bdfc1);
+    }
+    .wrapper:hover{
+      box-shadow: 0 0 0.75rem #55ff96;
+      filter: drop-shadow(0 0 0.75rem #55ff96);
+    }
+    h5{
+      font-weight: 400;
+    }
+    h5 a{
+      font-weight: 600;
+    }
+    input{
+      border-radius: 10px;
+      outline: none;
+      cursor: pointer;
+      text-align: center;
+      /* padding: 0 3vh; */
+    }
+    .section:nth-child(2){
+      margin-left: 4vh;
+    }
+  </style>
+</head>
+
+<body>
+    <% include ./loader.ejs %>
+    <div id="center">
+        <h1>WhatsApp Sign up</h1>
+    </div>
+
+  <div class="wrapper">
+    <form method="post" action="/register">
+      <div class="section">
+        <label for="Username">Username</label>
+        <input name="username" type="text" placeholder="enter your username" required />
+      </div>
+      <div class="section">
+        <label for="phone no">phone no</label>
+        <input name="phone no" type="tel" placeholder="enter phone no" required />
+      </div>
+      <div class="section">
+        <label for="password">password</label>
+        <input name="password" type="password" placeholder="enter your password" required />
+      </div>
+      <div class="send">
+      <button type="submit">Sign Up</button>   
+
+      </div>
+      <h5>Already have an account? <a href="/login">Login</a></h5>
+    </form>
+  </div>
+  
+</body>
+
+</html>

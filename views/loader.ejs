@@ -1,0 +1,62 @@
+
+    <style>
+
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+        html, body {
+        width: 100%;
+        height: 100%;
+        overflow:hiddden;
+        margin:0;
+        padding: 0;
+        }
+
+        #div{
+        width: 100vw;
+        height: 100vh;
+        animation: aniover 1s 2s linear forwards;
+        /* background-color: #17804f; */
+        background-color: #05A58B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        z-index: 50;
+        top: 0;
+        left: 0;
+        }
+        
+
+        .circle-ripple {
+        background-color: #35ffc3;
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        animation: ripple 0.7s linear infinite;
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+
+        @keyframes ripple {
+        0% {
+            box-shadow: 0 0 0 0 rgba(2, 207, 170, 0.3), 0 0 0 12px rgba(2, 207, 170, 0.3), 0 0 0 20px rgba(2, 207, 170, 0.3), 0 0 0 28px rgba(2, 207, 170, 0.3);
+        }
+        100% {
+            box-shadow: 0 0 0 12px rgba(2, 207, 170, 0.3), 0 0 0 20px rgba(2, 207, 170, 0.3), 0 0 0 28px rgba(2, 207, 170, 0.3), 0 0 0 40px rgba(2, 207, 170, 0);
+        }
+        }   
+
+        @keyframes aniover {
+            95%{opacity: 0.9;}
+            100% {opacity: 0; display: none;}
+        }
+        
+    </style>
+
+
+    <div id="div"><i class="circle-ripple fa fa-whatsapp fa-2x"></i></div>
+
+
+    
