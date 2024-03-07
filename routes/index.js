@@ -33,8 +33,9 @@ router.get('/login', function(req, res){
   res.render('login.ejs');
 })
 
-router.get('/home', isLoggedIn,async function(req, res){
+router.get('/home', isLoggedIn,async function(req, res,next){
   var user = await userModel.findOne({username:req.session.passport.user}).populate('friend');
+  console.log(user);
   res.render('home.ejs',{user: user});
 })
 
@@ -81,6 +82,7 @@ router.post('/addfriend', isLoggedIn,async function(req, res, next) {
   else{ 
     user.friend.push(friendid)
     frienduser.friend.push(user._id)
+
     await user.save()
     await frienduser.save()
     
