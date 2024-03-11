@@ -70,6 +70,7 @@ body {
   height: 60px;
   background: #ededed;
   padding: 0 15px;
+  opacity: 1;
 }
 
 .user-img {
@@ -276,13 +277,13 @@ img {
 /* right-container */
 
 
-.right-container .header {
+.right-container .headertwo {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.right-container .header .img-text .user-img .dp {
+.right-container .headertwo .img-text .user-img .dp {
   position:relative;
   top: -2px;
   left: 0px;
@@ -292,7 +293,7 @@ img {
   object-fit: cover;
 }
 
-.right-container .header .img-text {
+.right-container .headertwo .img-text {
   position: relative;
   display: flex;
   justify-content: center;
@@ -300,24 +301,24 @@ img {
   cursor: pointer;
 }
 
-.right-container .header .img-text h4 {
+.right-container .headertwo .img-text h4 {
   font-weight: 500;
   line-height: 1.2em;
   margin-left: 15px;
 }
 
-.right-container .header .img-text h4 span {
+.right-container .headertwo .img-text h4 span {
   font-size: 0.8em;
   color: #555;
 }
 
-.right-container .header .nav-icons {
+.right-container .headertwo .nav-icons {
   position: relative;
   margin-right:0px;
 /*   padding: 5px; */
 }
 
-.right-container .header .nav-icons i {
+.right-container .headertwo .nav-icons i {
   padding: 10px;
 }
 

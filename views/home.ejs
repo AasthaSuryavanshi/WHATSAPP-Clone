@@ -4,6 +4,10 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Document</title>
+   <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
    <link rel="stylesheet" href="/stylesheets/style.css">
    <script src="https://cdn.tailwindcss.com"></script>
    <script src="https://kit.fontawesome.com/391827d54c.js" crossorigin="anonymous"></script>
@@ -37,16 +41,17 @@
 <!--search-container -->
       <div class="search-container">
         <div class="input">
-<i class="fa-solid fa-magnifying-glass"></i>
-          <input id="search-inp" type="text" placeholder="Search or start new chat"></div>
-     <i class="fa-sharp fa-solid fa-bars-filter"></i>
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="search-inp" type="text" placeholder="Search or start new chat">
+        </div>
+          <i class="fa-sharp fa-solid fa-bars-filter"></i>
       </div>
 
 
 <!--chats -->
       <div class="chat-list">
           <% user.friend.forEach(function(frd){ %>
-            <div onclick="addfriend(event,'<%= frd._id%>','<%=frd.username%>','<%=frd.profileImage%>')" class="chat-box" id="friend_<%=frd._id%>">
+            <div onclick="openchat('<%= frd._id%>', '<%= frd.username %>', '<%= frd.profileImage%>') " class="chat-box" id="friend_<%= frd._id %>">
               <div class="img-box">
                 <img class="img-cover" src="<%=frd.profileImage%>" alt="">
               </div>
@@ -83,8 +88,8 @@
 
     <div class="right-container">
 <!--header -->
-      <div class="header">
-        <div class="img-text">
+      <div class="headertwo header opacity-0">
+        <div class="img-text ">
           <div class="user-img">
           <img class="dp" src="https://images.pexels.com/photos/2474307/pexels-photo-2474307.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
         </div>
@@ -97,45 +102,17 @@
       </div>
 
 <!--chat-container -->
-      <div class="chat-container">
-        <div class="message-box my-message">
-          <p>I've been waiting to see that show asap!<br><span>07:43</span></p>
-        </div>
-        <div class="message-box friend-message">
-          <p>Ahh, I can't believe you do too!<br><span>07:45</span></p>
-        </div>
-        <div class="message-box friend-message">
-          <p>The trailer looks good<br><span>07:45</span></p>
-        </div>
-        <div class="message-box friend-message">
-          <p>I've been waiting to watch it!!<br><span>07:45</span></p>
-        </div>
-        <div class="message-box my-message">
-          <p>😐😐😐<br><span>07:46</span></p>
-        </div>
-        <div class="message-box my-message">
-          <p>Mee too! 😊<br><span>07:46</span></p>
-        </div>
-      <div class="message-box friend-message">
-          <p>We should video chat to discuss, if you're up for it!<br><span>07:48</span></p>
-        </div>
-        <div class="message-box my-message">
-          <p>Sure<br><span>07:48</span></p>
-        </div>
-        <div class="message-box my-message">
-          <p>I'm free now!<br><span>07:48</span></p>
-        </div>
-      <div class="message-box friend-message">
-          <p>Awesome! I'll start a video chat with you in a few.<br><span>07:49</span></p>
-        </div>
+      <div class="chat-container opacity-0">
+        
+
       </div>
 
 <!--input-bottom -->
-      <div class="chatbox-input">
+      <div class="chatbox-input opacity-0">
         <i class="fa-regular fa-face-grin"></i>
         <i class="fa-sharp fa-solid fa-paperclip"></i>
-        <input type="text" placeholder="Type a message">
-        <i class="fa-solid fa-microphone"></i>
+        <input class="inp-msg" type="text" placeholder="Type a message">
+        <i onclick="sendmessage()" class=" send-btn ri-send-plane-fill"></i>
       </div>
     </div>
 
@@ -153,10 +130,21 @@
         var socket = io();
 
         const username = `<%= user.username %>`
+        let oppositeuser = null
+
+        socket.emit('join-server', username)
+
         
       document.querySelector("#search-inp").addEventListener("input",async (event) => {
          document.querySelector(".search-list").style.display="initial"
          document.querySelector(".chat-list").style.display="none"
+         document.querySelector(".search-list").addEventListener("click", (event) =>{
+          document.querySelector(".search-list").style.display="none"
+          document.querySelector(".chat-list").style.display="initial"
+          document.querySelector("#search-inp").value="";
+
+
+         })
          const data = document.querySelector("#search-inp").value;
 
          const response = await axios.post('/searchuser',{
@@ -174,27 +162,27 @@
           }
          });
         })
-
-
-
-
-      function appendSearch(userID, username , profileImage) {
-        var searchTemp = `<div onclick="addfriend(event,'${userID}', '${username}' , '${profileImage}')" class="chat-box" id="${userID}">
-        <div class="img-box">
-          <img class="img-cover" src="${profileImage}" alt="">
-        </div>
-        <div class="chat-details">
-          <div class="text-head">
-            <h4>${username}</h4>
-            <p class="time">Yesterday</p>
+        function appendSearch(userID, username , profileImage) {
+          var searchTemp = `<div onclick="addfriend(event,'${userID}', '${username}' , '${profileImage}')" class="chat-box" id="${userID}">
+          <div class="img-box">
+            <img class="img-cover" src="${profileImage}" alt="">
           </div>
-          <div class="text-message">
-            <p>“Now or never.”</p>
+          <div class="chat-details">
+            <div class="text-head">
+              <h4>${username}</h4>
+              <p class="time">Yesterday</p>
+            </div>
+            <div class="text-message">
+              <p>“Now or never.”</p>
+            </div>
           </div>
-        </div>
-      </div>`;
-      document.querySelector(".search-list").innerHTML += searchTemp;
-      }
+        </div>`;
+        document.querySelector(".search-list").innerHTML += searchTemp;
+        }
+
+
+
+
 
 
       async function addfriend(event,id,username,profileImage) {
@@ -216,10 +204,10 @@
       }
 
       function appendChat(id,username,profileImage) {
-        if(document.querySelector(`.chat-box #friend_${id}`)){
+        if(document.querySelector(`#friend_${id}`)){
           return
         }else{
-          var temp = `<div class="chat-box">
+          var temp = `<div class="chat-box" id="friend_${id}">
             <div class="img-box">
               <img class="img-cover" src="${profileImage}" alt="">
             </div>
@@ -238,8 +226,66 @@
 
       }
 
-      console.log(username);
+      
+      async function openchat(id, username, profileImage) {
+        const header = document.querySelector(".headertwo")
+        const chatcontainer = document.querySelector(".chat-container")
+        const chatboxinput = document.querySelector(".chatbox-input")
 
+        header.classList.remove("opacity-0")
+        header.classList.add("opacity-1")        
+        chatcontainer.classList.remove("opacity-0")
+        chatcontainer.classList.add("opacity-1")
+        chatboxinput.classList.remove("opacity-0")
+        chatboxinput.classList.add("opacity-1")
+
+
+        const response = await axios.post('/getmessage',{
+          oppositeuser: username, 
+        })
+        oppositeuser = username
+      }
+
+
+      function outgoingmsg(msg){
+        const temp = `<div class="message-box my-message">
+          <p>${msg} <br><span>07:43</span></p>
+        </div>`;
+        document.querySelector('.chat-container').innerHTML += temp
+
+      }
+
+      function incomingmsg(msg){
+        const temp = `<div class="message-box friend-message">
+          <p>${msg} <br><span>07:43</span></p>
+        </div>`;
+        document.querySelector('.chat-container').innerHTML += temp
+
+      }
+
+      function sendmessage(){
+        const msg = document.querySelector(".inp-msg").value;
+
+        if(msg == ""){
+          return
+        }else{
+          outgoingmsg(msg)
+          document.querySelector(".inp-msg").value = "";
+        }
+
+        const msgobj = {
+          msg,
+          receiver: oppositeuser,
+          sender:username,
+        }
+      socket.emit('sendprivatemsg',msgobj)
+
+      }
+
+      socket.on("receiveprivatemsg",msg => {
+        console.log(msg);
+        incomingmsg(msg.msg)
+      })
 
     </script>
 </body>

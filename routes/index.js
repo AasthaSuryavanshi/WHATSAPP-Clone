@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const userModel= require("./users")
+const userModel= require("./users");
+const messageModel = require("./message");
 const passport = require('passport');
 const localStrategy = require('passport-local');
 passport.use(new localStrategy(userModel.authenticate()));
@@ -94,7 +95,24 @@ router.post('/addfriend', isLoggedIn,async function(req, res, next) {
 
 
 
+router.post('/getmessages',isLoggedIn, async function(req, res,next) {
+  const chats = await messageModel.find({
+    $or: [
+      {
+        sender: req.user.username,
+        receiver: req.body.oppositeuser
+      },
+      {
+        sender: req.body.oppositeuser,
+        receiver: req.user.username
+      }
+    ]
+  })
 
+  console.log(chats)
+
+  res.status(200).json(chats)
+});
 
 
 
